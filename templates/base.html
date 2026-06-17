@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Ledger{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="{{ 'is-authed' if current_user.is_authenticated else 'is-guest' }}">
+
+{% if current_user.is_authenticated %}
+<div class="shell">
+  <aside class="sidebar">
+    <a href="{{ url_for('dashboard') }}" class="brand">
+      <span class="brand-mark">$</span>
+      <span class="brand-text">Ledger</span>
+    </a>
+    <nav class="side-nav">
+      <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' }}">Dashboard</a>
+      <a href="{{ url_for('expenses_list') }}" class="{{ 'active' if request.endpoint in ['expenses_list', 'edit_expense'] }}">Expenses</a>
+      <a href="{{ url_for('add_expense') }}" class="{{ 'active' if request.endpoint == 'add_expense' }}">Add expense</a>
+    </nav>
+    <div class="side-foot">
+      <div class="side-user">
+        <span class="side-user-dot"></span>
+        <span>{{ current_user.username }}</span>
+      </div>
+      <a href="{{ url_for('logout') }}" class="logout-link">Log out</a>
+    </div>
+  </aside>
+
+  <div class="main-col">
+    <header class="topbar">
+      <span class="topbar-title">{% block page_title %}Dashboard{% endblock %}</span>
+    </header>
+    <main class="content">
+      {% include "_flashes.html" %}
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</div>
+{% else %}
+<main class="guest-shell">
+  {% include "_flashes.html" %}
+  {% block guest_content %}{% endblock %}
+</main>
+{% endif %}
+
+{% block scripts %}{% endblock %}
+</body>
+</html>
