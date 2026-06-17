@@ -28,6 +28,9 @@ login_manager.login_message = "Please log in to continue."
 login_manager.login_message_category = "info"
 login_manager.init_app(app)
 
+with app.app_context():
+    db.create_all()
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -236,6 +239,4 @@ def delete_expense(expense_id):
 
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-    app.run(debug=True)
+    app.run(debug=False)
