@@ -1,3 +1,4 @@
+import os
 from collections import defaultdict
 from datetime import date, datetime
 
@@ -20,6 +21,7 @@ CATEGORIES = [
 
 app = Flask(__name__)
 app.config.from_object(Config)
+os.makedirs(os.path.join(app.root_path, "instance"), exist_ok=True)
 db.init_app(app)
 
 login_manager = LoginManager()
